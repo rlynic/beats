@@ -19,14 +19,16 @@ package includes
 
 import (
 	// import queue types
+	//_ "github.com/elastic/beats/libbeat/outputs/clickhouse-20200328"
 	_ "github.com/elastic/beats/libbeat/outputs/codec/format"
 	_ "github.com/elastic/beats/libbeat/outputs/codec/json"
-	_ "github.com/elastic/beats/libbeat/outputs/console"
+	//_ "github.com/elastic/beats/libbeat/outputs/console"
 	_ "github.com/elastic/beats/libbeat/outputs/elasticsearch"
-	_ "github.com/elastic/beats/libbeat/outputs/fileout"
-	_ "github.com/elastic/beats/libbeat/outputs/kafka"
-	_ "github.com/elastic/beats/libbeat/outputs/logstash"
-	_ "github.com/elastic/beats/libbeat/outputs/redis"
-	_ "github.com/elastic/beats/libbeat/publisher/queue/memqueue"
-	_ "github.com/elastic/beats/libbeat/publisher/queue/spool"
+	//_ "github.com/elastic/beats/libbeat/outputs/fileout"
+	//_ "github.com/elastic/beats/libbeat/outputs/kafka"
+	//_ "github.com/elastic/beats/libbeat/outputs/logstash"
+	//_ "github.com/elastic/beats/libbeat/outputs/redis"
+	//_ "github.com/elastic/beats/libbeat/publisher/queue/memqueue"
+	//_ "github.com/elastic/beats/libbeat/publisher/queue/spool"
+	_ "github.com/rlynic/filebeat-output-clickhouse"
 )

@@ -20,6 +20,7 @@ package beater
 import (
 	"flag"
 	"fmt"
+	//"github.com/elastic/beats/libbeat/kibana"
 	"strings"
 
 	"github.com/elastic/beats/libbeat/common/reload"
@@ -32,7 +33,7 @@ import (
 	"github.com/elastic/beats/libbeat/cfgfile"
 	"github.com/elastic/beats/libbeat/common"
 	"github.com/elastic/beats/libbeat/common/cfgwarn"
-	"github.com/elastic/beats/libbeat/kibana"
+	//"github.com/elastic/beats/libbeat/kibana"
 	"github.com/elastic/beats/libbeat/logp"
 	"github.com/elastic/beats/libbeat/management"
 	"github.com/elastic/beats/libbeat/monitoring"
@@ -44,9 +45,8 @@ import (
 	"github.com/elastic/beats/filebeat/crawler"
 	"github.com/elastic/beats/filebeat/fileset"
 	"github.com/elastic/beats/filebeat/registrar"
-
 	// Add filebeat level processors
-	_ "github.com/elastic/beats/filebeat/processor/add_kubernetes_metadata"
+	//_ "github.com/elastic/beats/filebeat/processor/add_kubernetes_metadata"
 )
 
 const pipelinesWarning = "Filebeat is unable to load the Ingest Node pipelines for the configured" +
@@ -207,75 +207,75 @@ func (fb *Filebeat) loadModulesML(b *beat.Beat, kibanaConfig *common.Config) err
 		return nil
 	}
 
-	esConfig := b.Config.Output.Config()
-	esClient, err := elasticsearch.NewConnectedClient(esConfig)
-	if err != nil {
-		return errors.Errorf("Error creating Elasticsearch client: %v", err)
-	}
+	//esConfig := b.Config.Output.Config()
+	//esClient, err := elasticsearch.NewConnectedClient(esConfig)
+	//if err != nil {
+	//	return errors.Errorf("Error creating Elasticsearch client: %v", err)
+	//}
 
-	if kibanaConfig == nil {
-		kibanaConfig = common.NewConfig()
-	}
+	//if kibanaConfig == nil {
+	//	kibanaConfig = common.NewConfig()
+	//}
 
-	if esConfig.Enabled() {
-		username, _ := esConfig.String("username", -1)
-		password, _ := esConfig.String("password", -1)
+	//if esConfig.Enabled() {
+	//	username, _ := esConfig.String("username", -1)
+	//	password, _ := esConfig.String("password", -1)
+	//
+	//	if !kibanaConfig.HasField("username") && username != "" {
+	//		kibanaConfig.SetString("username", -1, username)
+	//	}
+	//	if !kibanaConfig.HasField("password") && password != "" {
+	//		kibanaConfig.SetString("password", -1, password)
+	//	}
+	//}
 
-		if !kibanaConfig.HasField("username") && username != "" {
-			kibanaConfig.SetString("username", -1, username)
-		}
-		if !kibanaConfig.HasField("password") && password != "" {
-			kibanaConfig.SetString("password", -1, password)
-		}
-	}
-
-	kibanaClient, err := kibana.NewKibanaClient(kibanaConfig)
-	if err != nil {
-		return errors.Errorf("Error creating Kibana client: %v", err)
-	}
-
-	if err := setupMLBasedOnVersion(fb.moduleRegistry, esClient, kibanaClient); err != nil {
-		errs = append(errs, err)
-	}
+	//kibanaClient, err := kibana.NewKibanaClient(kibanaConfig)
+	//if err != nil {
+	//	return errors.Errorf("Error creating Kibana client: %v", err)
+	//}
+	//
+	//if err := setupMLBasedOnVersion(fb.moduleRegistry, esClient, kibanaClient); err != nil {
+	//	errs = append(errs, err)
+	//}
 
 	// Add dynamic modules.d
 	if fb.config.ConfigModules.Enabled() {
 		config := cfgfile.DefaultDynamicConfig
 		fb.config.ConfigModules.Unpack(&config)
 
-		modulesManager, err := cfgfile.NewGlobManager(config.Path, ".yml", ".disabled")
-		if err != nil {
-			return errors.Wrap(err, "initialization error")
-		}
+		//modulesManager, err := cfgfile.NewGlobManager(config.Path, ".yml", ".disabled")
+		//if err != nil {
+		//	return errors.Wrap(err, "initialization error")
+		//}
 
-		for _, file := range modulesManager.ListEnabled() {
-			confs, err := cfgfile.LoadList(file.Path)
-			if err != nil {
-				errs = append(errs, errors.Wrap(err, "error loading config file"))
-				continue
-			}
-			set, err := fileset.NewModuleRegistry(confs, "", false)
-			if err != nil {
-				errs = append(errs, err)
-				continue
-			}
+		//for _, file := range modulesManager.ListEnabled() {
+		//confs, err := cfgfile.LoadList(file.Path)
+		//if err != nil {
+		//	errs = append(errs, errors.Wrap(err, "error loading config file"))
+		//	continue
+		//}
+		//set, err := fileset.NewModuleRegistry(confs, "", false)
+		//if err != nil {
+		//	errs = append(errs, err)
+		//	continue
+		//}
 
-			if err := setupMLBasedOnVersion(set, esClient, kibanaClient); err != nil {
-				errs = append(errs, err)
-			}
+		//if err := setupMLBasedOnVersion(set, esClient, kibanaClient); err != nil {
+		//	errs = append(errs, err)
+		//}
 
-		}
+		//}
 	}
 
 	return errs.Err()
 }
 
-func setupMLBasedOnVersion(reg *fileset.ModuleRegistry, esClient *elasticsearch.Client, kibanaClient *kibana.Client) error {
-	if isElasticsearchLoads(kibanaClient.GetVersion()) {
-		return reg.LoadML(esClient)
-	}
-	return reg.SetupML(esClient, kibanaClient)
-}
+//func setupMLBasedOnVersion(reg *fileset.ModuleRegistry, esClient *elasticsearch.Client, kibanaClient *kibana.Client) error {
+//	if isElasticsearchLoads(kibanaClient.GetVersion()) {
+//		return reg.LoadML(esClient)
+//	}
+//	return reg.SetupML(esClient, kibanaClient)
+//}
 
 func isElasticsearchLoads(kibanaVersion common.Version) bool {
 	return kibanaVersion.Major < 6 ||
