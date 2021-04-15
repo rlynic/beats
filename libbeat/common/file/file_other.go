@@ -45,14 +45,17 @@ func GetOSState(info os.FileInfo) StateOS {
 
 // IsSame file checks if the files are identical
 func (fs StateOS) IsSame(state StateOS) bool {
-	return fs.Inode == state.Inode && fs.Device == state.Device
+	//return fs.Inode == state.Inode && fs.Device == state.Device
+	return fs.Inode == state.Inode
 }
 
 func (fs StateOS) String() string {
 	var buf [64]byte
 	current := strconv.AppendUint(buf[:0], fs.Inode, 10)
 	current = append(current, '-')
-	current = strconv.AppendUint(current, fs.Device, 10)
+	//current = strconv.AppendUint(current, fs.Device, 10)
+	//ignore device, use same device no
+	current = strconv.AppendUint(current, 10000, 10)
 	return string(current)
 }
 
